@@ -9,6 +9,11 @@ public class Thoughts : MonoBehaviour {
 	public string[] kidsThoughts;
 
 
+	void Update()
+	{
+		if (!GameManager.isActive)
+			return;
+	}
 	public string sendThoughts(string personName)
 	{
 		if (personName == "GrandMa") {

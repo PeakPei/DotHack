@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Vuforia;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GodMechanics : MonoBehaviour {
 
@@ -15,30 +16,37 @@ public class GodMechanics : MonoBehaviour {
 	public Sprite[] characterIcons;
 	public Button wishButton;
 	public GameObject explosionEffect;
+	public GameObject character;
 	private UnityEngine.UI.Image characterIcon;
-	//for testing
 
-	private bool flag=false;
 
 	// Use this for initialization
 	void Start () {
 		thoughts = GameObject.Find ("GameManager").gameObject.GetComponent<Thoughts> ();
 		uiElements = GameObject.Find ("GameManager").gameObject.GetComponent<UI> ();
 		wishes = GameObject.Find ("GameManager").gameObject.GetComponent<WishGranting> ();
-		characterIcon = GameObject.Find ("CharacterIcon").gameObject.GetComponent<UnityEngine.UI.Image>();
+		characterIcon =character.GetComponent<UnityEngine.UI.Image>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (!GameManager.isActive)
+			return;
+			
 		if (Input.GetMouseButtonDown (0)) {//checking user input
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if(Physics.Raycast(ray, out hit, 1000f))
 			{
-				if (hit.transform.gameObject.tag == "House") {
-					StartCoroutine (Explosion (hit.transform.gameObject));
-				} else if(hit.transform.gameObject.tag == "Person") {
-					LoadThoughts(hit.transform.gameObject.name);
+				if (!IsPointerOverUIObject())
+				{
+					if (hit.transform.gameObject.tag == "House") {
+						StartCoroutine (Explosion (hit.transform.gameObject));
+					} else if(hit.transform.gameObject.tag == "Person") {
+						LoadThoughts(hit.transform.gameObject.name);
+					}
 				}
+
 			}
 		}
 	}
@@ -84,5 +92,15 @@ public class GodMechanics : MonoBehaviour {
 		yield return new WaitForSeconds (1.2f);
 		Destroy (explode);
 		Destroy (target);
+	}
+
+	//When Touching UI
+	private bool IsPointerOverUIObject()
+	{
+		PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+		eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+		List<RaycastResult> results = new List<RaycastResult>();
+		EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+		return results.Count > 0;
 	}
 }

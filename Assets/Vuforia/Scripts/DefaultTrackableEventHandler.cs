@@ -84,6 +84,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
         // Enable canvas':
         foreach (var component in canvasComponents)
             component.enabled = true;
+		GameManager.isActive = true;
     }
 
 
@@ -104,6 +105,8 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
         // Disable canvas':
         foreach (var component in canvasComponents)
             component.enabled = false;
+		
+		GameManager.isActive = false;
     }
 
     #endregion // PRIVATE_METHODS

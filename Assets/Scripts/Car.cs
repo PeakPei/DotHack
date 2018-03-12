@@ -18,13 +18,13 @@ public class Car : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//if (target != null){
-		//	transform.position = Vector3.Lerp(transform.position, target.transform.position, speed * Time.deltaTime);
-		//}
-
+		if (!GameManager.isActive) {
+			Destroy (gameObject);
+			return;
+		}
+		
 		if (path != null){
 			if (path.Count == targetPos){
-				//Debug.Log ("End of road");
 				Destroy (gameObject);
 			}
 			else {
@@ -35,10 +35,8 @@ public class Car : MonoBehaviour {
 					 float reltiveTime = distanceTime / distanceBetween;
 
 					if (distanceBetween == 0){
-						Debug.Log("Reached Target " +  targetPos);
 						targetPos++;
 						startTime = Time.time;
-						Debug.Log("Rotating by: " + tar.yRotate);
 						transform.Rotate(0, tar.yRotate,0);
 					}
 

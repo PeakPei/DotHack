@@ -13,17 +13,16 @@ public class CarManager : MonoBehaviour {
 	void Start () {
 		InvokeRepeating("SpawnCar", 0.5f, Random.Range(5.0f,10.0f));
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	void Update()
+	{
+		if (!GameManager.isActive)
+			return;
 	}
 
 	void SpawnCar (){
-		Debug.Log ("Spawning car");
 		if (path != null && path.Count > 0){
 			GameObject car = Instantiate (carPrefab,path[0].transform.position, path[0].transform.rotation);
-			//car.transform.SetParent (GameObject.Find ("ImageTarget").transform);
 			car.GetComponent<Car>().path = path;
 			car.GetComponent<Car>().targetPos = 0;
 		}

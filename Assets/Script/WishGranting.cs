@@ -14,6 +14,11 @@ public class WishGranting : MonoBehaviour {
 		for (int i = 0; i < wishStatus.Length; i++)
 			wishStatus [i] = false;
 	}
+	void Update()
+	{
+		if (!GameManager.isActive)
+			return;
+	}
 	IEnumerator GrantWish(string wish)
 	{
 		GameObject effect;
